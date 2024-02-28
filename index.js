@@ -59,11 +59,11 @@ app.post("/api/shorturl",
     // --- CREATE URL OBJECT
   let urlObject = new URL(req.body.url);
   // --- RegEx FOR https://www.example.com FORMAT
-  let reg = /^https?:\/\/www\.\w+\.[a-z]+/i ;
+  // let reg = /^https?:\/\/www\.\w+\.[a-z]+/i ;
     // --- IF URL FORMAT IS INVALID
-  if(!reg.test(req.body.url)){
-    res.json({"error": "invalid url"})
-  }else{
+  // if(!reg.test(req.body.url)){
+    // res.json({"error": "invalid url"})
+  // }else{
   // --- IF URL FORMAT IS VALID, CHECK IF HOSTNAME EXISTS
     dns.lookup(urlObject.hostname, function(err, address, family){
       // --- IF HOSTNAME DOES NOT EXIST:
@@ -100,7 +100,7 @@ app.post("/api/shorturl",
       // next();  
       }
     })
-  } 
+  // } 
 }
 )
 
