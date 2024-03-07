@@ -8,7 +8,9 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 
-// MY CODE ↓ ↓ ↓ ↓
+// --- MY CODE ---
+// ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ 
+
 let dns = require('dns');
 let URL = require('url-parse');
 
@@ -16,8 +18,8 @@ let bodyParser = require('body-parser');
 
 app.use("/", bodyParser.urlencoded({extended:false}))
 
-
-// MY CODE ↑ ↑ ↑ ↑
+// ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ 
+// --- MY CODE ---
 
 app.use('/public', express.static(`${process.cwd()}/public`));
 
@@ -58,14 +60,8 @@ app.post("/api/shorturl",
   (req, res)=>{
     // --- CREATE URL OBJECT
   let urlObject = new URL(req.body.url);
-  // --- RegEx FOR https://www.example.com FORMAT
-  // let reg = /^https?:\/\/www\.\w+\.[a-z]+/i ;
-    // --- IF URL FORMAT IS INVALID
-  // if(!reg.test(req.body.url)){
-    // res.json({"error": "invalid url"})
-  // }else{
   // --- IF URL FORMAT IS VALID, CHECK IF HOSTNAME EXISTS
-    dns.lookup(urlObject.hostname, function(err, address, family){
+    dns.lookup(urlObject.hostname, function(err, data){
       // --- IF HOSTNAME DOES NOT EXIST:
       if(err){
         res.json({ "error": 'invalid url' })
@@ -74,14 +70,6 @@ app.post("/api/shorturl",
       // --- CREATE RANDOM NUMBER FOR SHORT URL
       let shortURL = Math.floor(Math.random()*(99999))+1;
       // --- MAKE SURE IT DOESN'T ALREADY EXIST IN THE DATABASE
-
-      // while(urlReferences.hasOwnProperty(shortURL)){
-      // for(let longURL in urlReferences){
-      //   while(urlReferences.hasOwnProperty(longURL) && urlReferences[longURL] == shortURL){
-      //     // IF IT ALREADY EXISTS, REASSING shortURL TO A NEW NUMBER
-      //     shortURL = Math.floor(Math.random()*(99999))+1;
-      //   }
-      // }
       while( Object.values(urlReferences).includes(shortURL) ){
         // IF IT ALREADY EXISTS, REASSING shortURL TO A NEW NUMBER
         shortURL = Math.floor(Math.random()*(99999))+1;
@@ -92,12 +80,7 @@ app.post("/api/shorturl",
       res.json({
         "original_url": req.body.url,
         "short_url": shortURL
-        // ,"test": urlReferences
-        // "hostname": urlObject.hostname,
-        // "addres": address,
-        // "family": family
         });
-      // next();  
       }
     })
   // } 
